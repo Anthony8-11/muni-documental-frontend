@@ -1,5 +1,5 @@
 // Importar configuración (se debe cargar config.js antes que este archivo)
-const API_BASE_URL = window.CONFIG?.API_BASE_URL || 'http://localhost:3000';
+const API_BASE_URL = window.CONFIG?.API_BASE_URL || 'https://reliable-salmiakki-557968.netlify.app';
 
 // UI toggles: show signin by default, allow switching to signup
 document.addEventListener('DOMContentLoaded', () => {
