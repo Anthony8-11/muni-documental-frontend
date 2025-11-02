@@ -1,0 +1,24 @@
+{
+  "name": "muni-documental-frontend",
+  "version": "1.0.0",
+  "description": "Frontend del Gestor Documental Municipal Inteligente",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8080",
+    "serve": "python -m http.server 3000",
+    "build": "echo 'Static site - no build needed'"
+  },
+  "keywords": [
+    "document-management",
+    "frontend",
+    "municipal",
+    "javascript",
+    "html",
+    "css"
+  ],
+  "author": "Anthony",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

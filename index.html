@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor Documental Muni Inteligente - Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/config.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Gestor Documental Muni Inteligente</h1>
+        <div class="auth-forms">
+            <!-- Signup hidden by default -->
+            <div class="form-section" id="signup-section" style="display:none;">
+                <h2>Registro</h2>
+                <form id="signup-form">
+                    <input type="email" id="signup-email" placeholder="Correo electrónico" required>
+                    <input type="password" id="signup-password" placeholder="Contraseña" required>
+                    <button type="submit">Registrarse</button>
+                </form>
+                <p>¿Ya tienes cuenta? <button id="show-signin-btn" class="link-button">Iniciar Sesión</button></p>
+            </div>
+
+            <!-- Signin visible by default -->
+            <div class="form-section" id="signin-section">
+                <h2>Inicio de Sesión</h2>
+                <form id="signin-form">
+                    <input type="email" id="signin-email" placeholder="Correo electrónico" required>
+                    <input type="password" id="signin-password" placeholder="Contraseña" required>
+                    <button type="submit">Iniciar Sesión</button>
+                </form>
+                <p>¿No tienes cuenta? <button id="show-signup-btn" class="link-button">Registrarse</button></p>
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/auth.js"></script>
+</body>
+</html>

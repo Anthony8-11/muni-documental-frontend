@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor Documental Muni Inteligente - Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/config.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>Gestor Documental Muni Inteligente</h1>
+        <div class="nav-actions">
+            <button id="open-upload-btn" class="nav-btn">Subir Documento</button>
+            <button id="logout-button">Cerrar Sesión</button>
+        </div>
+    </nav>
+    <div class="container">
+        <!-- Upload section is now available as a modal; keep a compact placeholder for accessibility -->
+        <section class="upload-section" style="display:none;">
+            <h2>Subir Documento</h2>
+        </section>
+        <section class="chat-section">
+            <h2>Chat RAG</h2>
+            <div id="chat-window"></div>
+            <form id="search-form">
+                <input type="text" id="search-input" placeholder="Pregunta sobre tus documentos..." required>
+                <button type="submit">Enviar</button>
+            </form>
+        </section>
+        <section class="documents-section">
+            <h2>Mis Documentos</h2>
+            <div class="documents-controls" style="display:flex;gap:0.6rem;align-items:center;flex-wrap:wrap;margin-top:0.5rem;">
+                <input id="documents-search" type="search" placeholder="Buscar por nombre..." style="padding:0.5rem;border:1px solid var(--border-color);border-radius:8px;min-width:180px;">
+                <select id="documents-status-filter" style="padding:0.45rem;border:1px solid var(--border-color);border-radius:8px;">
+                    <option value="">Todos los estados</option>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Listo">Listo</option>
+                    <option value="Error">Error</option>
+                </select>
+                <select id="documents-sort" style="padding:0.45rem;border:1px solid var(--border-color);border-radius:8px;">
+                    <option value="uploaded_desc">Más recientes</option>
+                    <option value="uploaded_asc">Más antiguos</option>
+                    <option value="name_asc">Nombre A–Z</option>
+                    <option value="name_desc">Nombre Z–A</option>
+                </select>
+                <button id="documents-refresh" class="nav-btn">Refrescar</button>
+            </div>
+            <div id="documents-list" class="documents-list">
+                <!-- Documents will be rendered here -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Upload Modal -->
+    <div id="upload-modal" class="modal" aria-hidden="true">
+        <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="upload-title">
+            <button id="close-upload-btn" class="modal-close" aria-label="Cerrar">×</button>
+            <h2 id="upload-title">Subir Documento</h2>
+            <form id="upload-form">
+                <div id="dropzone" class="dropzone">
+                    <p>Arrastra y suelta tu documento aquí o <button id="browse-btn" type="button" class="link-button">buscar</button></p>
+                    <small>PDF, DOC, DOCX, TXT • Tamaño máximo recomendado 10MB</small>
+                    <input type="file" id="file-input" accept=".pdf,.doc,.docx,.txt" required style="display:none;">
+                </div>
+
+                <div id="file-preview" class="file-preview" aria-live="polite"></div>
+
+                <div class="modal-actions">
+                    <div id="upload-message" class="upload-message" role="status" aria-live="polite"></div>
+                    <button type="submit" class="primary">Subir Documento</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Logout Confirmation Modal -->
+    <div id="logout-modal" class="modal" aria-hidden="true">
+        <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="logout-title">
+            <button id="logout-modal-close" class="modal-close" aria-label="Cerrar">×</button>
+            <h2 id="logout-title">Confirmar cierre de sesión</h2>
+            <p>¿Estás seguro que deseas cerrar sesión? Se cerrará tu sesión actual y volverás a la pantalla de inicio.</p>
+            <div class="modal-actions" style="justify-content:flex-end;">
+                <button id="logout-cancel" class="link-button">Cancelar</button>
+                <button id="logout-confirm" class="primary">Cerrar sesión</button>
+            </div>
+        </div>
+    </div>
+    <!-- Summarize Modal -->
+    <div id="summarize-modal" class="modal" aria-hidden="true">
+        <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="summarize-title">
+            <button id="summarize-modal-close" class="modal-close" aria-label="Cerrar">×</button>
+            <h2 id="summarize-title">Resumen del documento</h2>
+            <div id="summarize-content" style="min-height:120px;padding:0.5rem;">Presiona "Resumir" en un documento para generar un resumen.</div>
+            <div class="modal-actions" style="justify-content:flex-end;">
+                <button id="summarize-close" class="primary">Cerrar</button>
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
