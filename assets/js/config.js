@@ -1,7 +1,7 @@
 // Configuración del entorno
 const CONFIG = {
     // URL del backend - se puede sobrescribir con variables de entorno
-    API_BASE_URL: window.ENV?.API_BASE_URL || 'http://localhost:3000',
+    API_BASE_URL: window.ENV?.API_BASE_URL || 'https://muni-documental-backend-production.up.railway.app',
     
     // Configuración de la aplicación
     APP_NAME: 'Gestor Documental Muni Inteligente',
