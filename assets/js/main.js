@@ -945,3 +945,175 @@ document.getElementById('search-form').addEventListener('submit', async (e) => {
     // Scroll al final después de la respuesta
     chatWindow.scrollTop = chatWindow.scrollHeight;
 });
+
+// =====================================================
+// FUNCIONALIDAD FECHAS IMPORTANTES
+// =====================================================
+
+// Cargar estadísticas de fechas
+async function loadDatesStats() {
+    try {
+        const response = await apiFetch(`${API_BASE_URL}/api/dates/stats`);
+        if (response.ok) {
+            const stats = await response.json();
+            renderDatesStats(stats);
+        }
+    } catch (error) {
+        console.error('Error loading dates stats:', error);
+    }
+}
+
+// Renderizar estadísticas de fechas
+function renderDatesStats(stats) {
+    const statsContainer = document.getElementById('dates-stats');
+    if (!statsContainer) return;
+
+    statsContainer.innerHTML = `
+        <div class="date-stat">
+            <span class="date-stat-number">${stats.upcomingDates || 0}</span>
+            <span class="date-stat-label">Próximas</span>
+        </div>
+        <div class="date-stat">
+            <span class="date-stat-number">${stats.thisWeek || 0}</span>
+            <span class="date-stat-label">Esta Semana</span>
+        </div>
+        <div class="date-stat">
+            <span class="date-stat-number">${stats.thisMonth || 0}</span>
+            <span class="date-stat-label">Este Mes</span>
+        </div>
+        <div class="date-stat">
+            <span class="date-stat-number">${stats.documentsWithDates || 0}</span>
+            <span class="date-stat-label">Documentos</span>
+        </div>
+    `;
+}
+
+// Cargar fechas importantes
+async function loadImportantDates() {
+    try {
+        const response = await apiFetch(`${API_BASE_URL}/api/dates/important?limit=15&upcoming=true`);
+        if (response.ok) {
+            const data = await response.json();
+            renderImportantDates(data.dates);
+        }
+    } catch (error) {
+        console.error('Error loading important dates:', error);
+        renderImportantDates([]);
+    }
+}
+
+// Renderizar fechas importantes
+function renderImportantDates(dates) {
+    const container = document.getElementById('important-dates-list');
+    if (!container) return;
+
+    if (!dates || dates.length === 0) {
+        container.innerHTML = `
+            <div class="empty-dates">
+                <div class="empty-dates-icon">📅</div>
+                <p>No hay fechas importantes próximas</p>
+                <p>Las fechas se extraerán automáticamente de los documentos procesados</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = dates.map(date => {
+        const daysClass = getDaysClass(date.daysDifference);
+        const priorityClass = getPriorityClass(date.priority);
+        
+        return `
+            <div class="date-item">
+                <div class="date-info">
+                    <div class="date-main">
+                        <span class="date-value">${date.dateFormatted}</span>
+                    </div>
+                    <div class="date-description">${escapeHtml(date.description)}</div>
+                    <div class="date-document">📄 ${escapeHtml(date.documentName)}</div>
+                </div>
+                <div class="date-badge">
+                    <span class="priority-badge ${priorityClass}">${formatPriority(date.priority)}</span>
+                    <span class="date-days ${daysClass}">${formatDaysLeft(date.daysDifference)}</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Obtener clase CSS para días restantes
+function getDaysClass(days) {
+    if (days <= 3) return 'urgent';
+    if (days <= 7) return 'soon';
+    if (days <= 30) return 'upcoming';
+    return 'distant';
+}
+
+// Obtener clase CSS para prioridad
+function getPriorityClass(priority) {
+    return priority || 'medium';
+}
+
+// Formatear prioridad para mostrar
+function formatPriority(priority) {
+    const priorities = {
+        'high': 'Alta',
+        'medium-high': 'Media-Alta',
+        'medium': 'Media',
+        'low': 'Baja'
+    };
+    return priorities[priority] || 'Media';
+}
+
+// Formatear días restantes
+function formatDaysLeft(days) {
+    if (days < 0) return 'Vencido';
+    if (days === 0) return 'Hoy';
+    if (days === 1) return 'Mañana';
+    return `${days} días`;
+}
+
+// Función auxiliar para escapar HTML
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Refrescar fechas importantes
+async function refreshImportantDates() {
+    const button = document.getElementById('refresh-dates-btn');
+    if (button) {
+        const originalText = button.textContent;
+        button.textContent = 'Actualizando...';
+        button.disabled = true;
+        
+        try {
+            await Promise.all([
+                loadDatesStats(),
+                loadImportantDates()
+            ]);
+        } finally {
+            button.textContent = originalText;
+            button.disabled = false;
+        }
+    }
+}
+
+// Event listeners para fechas importantes
+document.addEventListener('DOMContentLoaded', function() {
+    // Cargar fechas importantes al cargar la página
+    loadDatesStats();
+    loadImportantDates();
+    
+    // Botón de refrescar fechas
+    const refreshDatesBtn = document.getElementById('refresh-dates-btn');
+    if (refreshDatesBtn) {
+        refreshDatesBtn.addEventListener('click', refreshImportantDates);
+    }
+    
+    // Refrescar fechas cada 5 minutos
+    setInterval(() => {
+        loadDatesStats();
+        loadImportantDates();
+    }, 5 * 60 * 1000);
+});

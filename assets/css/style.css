@@ -1321,3 +1321,216 @@ body::before {
     font-size: 0.95rem;
     line-height: 1;
 }
+
+/* =====================================================
+   WIDGET DE FECHAS IMPORTANTES
+   ===================================================== */
+.important-dates-section {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.section-header h2 {
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.dates-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.date-stat {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    padding: 1rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.date-stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.date-stat-label {
+    font-size: 0.875rem;
+    opacity: 0.9;
+}
+
+.important-dates-list {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--light-bg);
+}
+
+.date-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    background: white;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.date-item:hover {
+    background: var(--accent-light);
+    transform: translateY(-1px);
+}
+
+.date-item:last-child {
+    border-bottom: none;
+}
+
+.date-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.date-main {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.date-value {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+.date-description {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+.date-document {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-style: italic;
+}
+
+.date-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.date-days {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    min-width: 80px;
+}
+
+.priority-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 20px;
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Colores para días restantes */
+.date-days.urgent {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+    color: white;
+}
+
+.date-days.soon {
+    background: linear-gradient(135deg, #feca57, #ffd93d);
+    color: #333;
+}
+
+.date-days.upcoming {
+    background: linear-gradient(135deg, #4ecdc4, #6bcf7f);
+    color: white;
+}
+
+.date-days.distant {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+/* Colores para prioridad */
+.priority-badge.high {
+    background: #ff6b6b;
+    color: white;
+}
+
+.priority-badge.medium-high {
+    background: #feca57;
+    color: #333;
+}
+
+.priority-badge.medium {
+    background: #4ecdc4;
+    color: white;
+}
+
+.priority-badge.low {
+    background: #718096;
+    color: white;
+}
+
+.empty-dates {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.empty-dates-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .date-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    
+    .date-badge {
+        align-self: flex-end;
+    }
+    
+    .dates-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .date-stat-number {
+        font-size: 1.5rem;
+    }
+}
