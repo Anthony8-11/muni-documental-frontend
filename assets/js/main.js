@@ -952,14 +952,33 @@ document.getElementById('search-form').addEventListener('submit', async (e) => {
 
 // Cargar estadísticas de fechas
 async function loadDatesStats() {
+    const statsContainer = document.getElementById('dates-stats');
+    if (!statsContainer) return;
+
+    // Mostrar estado de carga
+    statsContainer.innerHTML = `
+        <div class="date-stat">
+            <span class="date-stat-number">⏳</span>
+            <span class="date-stat-label">Cargando...</span>
+        </div>
+    `;
+
     try {
         const response = await apiFetch(`${API_BASE_URL}/api/dates/stats`);
         if (response.ok) {
             const stats = await response.json();
             renderDatesStats(stats);
+        } else {
+            throw new Error(`HTTP ${response.status}`);
         }
     } catch (error) {
         console.error('Error loading dates stats:', error);
+        statsContainer.innerHTML = `
+            <div class="date-stat">
+                <span class="date-stat-number">❌</span>
+                <span class="date-stat-label">Error</span>
+            </div>
+        `;
     }
 }
 
@@ -990,20 +1009,47 @@ function renderDatesStats(stats) {
 
 // Cargar fechas importantes
 async function loadImportantDates() {
+    const container = document.getElementById('important-dates-list');
+    if (!container) return;
+
+    // Mostrar estado de carga
+    container.innerHTML = `
+        <div class="empty-dates">
+            <div class="empty-dates-icon">⏳</div>
+            <p>Cargando fechas importantes...</p>
+        </div>
+    `;
+
     try {
         const response = await apiFetch(`${API_BASE_URL}/api/dates/important?limit=15&upcoming=true`);
         if (response.ok) {
             const data = await response.json();
-            renderImportantDates(data.dates);
+            const isRealData = data.realDates === true;
+            renderImportantDates(data.dates, isRealData);
+            
+            // Log para debugging
+            console.log('Fechas cargadas:', {
+                total: data.dates?.length || 0,
+                realDates: isRealData,
+                data: data
+            });
+        } else {
+            throw new Error(`HTTP ${response.status}`);
         }
     } catch (error) {
         console.error('Error loading important dates:', error);
-        renderImportantDates([]);
+        container.innerHTML = `
+            <div class="empty-dates">
+                <div class="empty-dates-icon">❌</div>
+                <p>Error al cargar fechas importantes</p>
+                <p>Verifica que el servidor esté funcionando</p>
+            </div>
+        `;
     }
 }
 
 // Renderizar fechas importantes
-function renderImportantDates(dates) {
+function renderImportantDates(dates, isRealData = false) {
     const container = document.getElementById('important-dates-list');
     if (!container) return;
 
@@ -1018,7 +1064,7 @@ function renderImportantDates(dates) {
         return;
     }
 
-    container.innerHTML = dates.map(date => {
+    const datesHtml = dates.map(date => {
         const daysClass = getDaysClass(date.daysDifference);
         const priorityClass = getPriorityClass(date.priority);
         
@@ -1038,6 +1084,24 @@ function renderImportantDates(dates) {
             </div>
         `;
     }).join('');
+
+    // Mostrar indicador según el tipo de datos
+    let indicator = '';
+    if (!isRealData) {
+        indicator = `
+            <div style="background: #f0f4f8; padding: 0.75rem; text-align: center; border-top: 1px solid var(--border-color); font-size: 0.75rem; color: var(--text-muted); font-style: italic;">
+                💡 Mostrando datos de ejemplo. Las fechas reales se extraerán automáticamente de los documentos.
+            </div>
+        `;
+    } else {
+        indicator = `
+            <div style="background: #e8f5e8; padding: 0.75rem; text-align: center; border-top: 1px solid #c3e6c3; font-size: 0.75rem; color: #2d5a2d; font-style: italic;">
+                ✅ Fechas extraídas automáticamente de los documentos
+            </div>
+        `;
+    }
+
+    container.innerHTML = datesHtml + indicator;
 }
 
 // Obtener clase CSS para días restantes
