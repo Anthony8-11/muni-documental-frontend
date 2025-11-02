@@ -964,7 +964,7 @@ async function loadDatesStats() {
     `;
 
     try {
-        const response = await apiFetch(`${API_BASE_URL}/api/dates/stats`);
+        const response = await apiFetch(`${CONFIG.API_BASE_URL}/api/dates/stats`);
         if (response.ok) {
             const stats = await response.json();
             renderDatesStats(stats);
@@ -1021,7 +1021,7 @@ async function loadImportantDates() {
     `;
 
     try {
-        const response = await apiFetch(`${API_BASE_URL}/api/dates/important?limit=15&upcoming=true`);
+        const response = await apiFetch(`${CONFIG.API_BASE_URL}/api/dates/important?limit=15&upcoming=true`);
         if (response.ok) {
             const data = await response.json();
             const isRealData = data.realDates === true;
