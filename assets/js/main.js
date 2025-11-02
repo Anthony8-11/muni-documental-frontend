@@ -1,5 +1,5 @@
 // Importar configuración (se debe cargar config.js antes que este archivo)
-const API_BASE_URL = window.CONFIG?.API_BASE_URL || 'muni-documental-backend-production.up.railway.app';
+const API_BASE_URL = window.CONFIG?.API_BASE_URL || 'https://muni-documental-backend-production.up.railway.app';
 
 // Guardia de autenticación
 let token = localStorage.getItem('accessToken');
